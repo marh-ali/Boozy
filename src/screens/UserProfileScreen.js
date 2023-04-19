@@ -53,8 +53,6 @@ const UserProfileScreen = ({ navigation }) => {
 
   const updateProfile = async () => {
     try {
-      console.log("Old name:", await AsyncStorage.getItem("displayName")); //  this line to check the user ID
-
       const response = await api.put("/users/update", {
         id: await AsyncStorage.getItem("userId"),
         newName: updatedName,
@@ -65,8 +63,6 @@ const UserProfileScreen = ({ navigation }) => {
       await AsyncStorage.setItem("displayName", response.data.user.displayName);
       await AsyncStorage.setItem("email", response.data.user.email);
       setEditing(false);
-
-      console.log("New Name:", response.data.user.displayName);
 
       Alert.alert("Success", "Profile updated successfully");
     } catch (error) {

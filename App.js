@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import WelcomeScreen from "./src/screens/WelcomeScreen";
 import SignUpScreen from "./src/screens/SignUpScreen";
 import LogInScreen from "./src/screens/LogInScreen";
-import MainScreen from "./src/screens/MainScreen";
+import MainScreen from "./src/screens/MainScreen/MainScreen";
 import HappyHourDetailsScreen from "./src/screens/HappyHourDetailsScreen";
 import UserProfileScreen from "./src/screens/UserProfileScreen";
 import BusinessDashboardScreen from "./src/screens/BusinessDashboardScreen";
