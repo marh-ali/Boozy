@@ -37,6 +37,17 @@ const MainScreen = ({ navigation }) => {
     fetchDisplayName();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", async () => {
+      const updatedName = await AsyncStorage.getItem("displayName");
+      setDisplayName(updatedName);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation]);
+
   const signOut = async () => {
     try {
       await AsyncStorage.removeItem("accessToken");
