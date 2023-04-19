@@ -23,6 +23,12 @@ const UserSchema = new mongoose.Schema({
   picture: {
     type: String,
   },
+  favoriteSpots: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Business",
+    },
+  ],
 });
 
 UserSchema.pre("save", async function (next) {
