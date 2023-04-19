@@ -176,4 +176,73 @@ router.put("/users/update", async (req, res) => {
   }
 });
 
+// Get all favorite spots for a user
+router.get("/users/:userId/favorites", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).select("favoriteSpots");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user.favoriteSpots);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving favorite spots" });
+  }
+});
+
+// Add a favorite spot for a user
+router.post("/users/:userId/favorites/:businessId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    const business = await Business.findById(req.params.businessId);
+
+    if (!user || !business) {
+      return res.status(404).json({ message: "User or business not found" });
+    }
+
+    const favoriteSpot = {
+      businessId: business._id,
+      name: business.name,
+      happyHour: {
+        menu: business.happyHour.menu,
+        times: business.happyHour.times,
+      },
+    };
+
+    user.favoriteSpots.push(favoriteSpot);
+    await user.save();
+
+    res.status(200).json({ message: "Favorite spot added", favoriteSpot });
+  } catch (error) {
+    res.status(500).json({ message: "Error adding favorite spot" });
+  }
+});
+
+// Remove a favorite spot for a user
+router.delete("/users/:userId/favorites/:businessId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const businessId = req.params.businessId;
+    const spotIndex = user.favoriteSpots.findIndex(
+      (spot) => spot.businessId.toString() === businessId
+    );
+
+    if (spotIndex !== -1) {
+      user.favoriteSpots.splice(spotIndex, 1);
+      await user.save();
+      res.status(200).json({ message: "Favorite spot removed" });
+    } else {
+      res.status(400).json({ message: "Favorite spot not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error removing favorite spot" });
+  }
+});
+
 module.exports = router;

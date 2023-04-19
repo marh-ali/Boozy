@@ -25,8 +25,23 @@ const UserSchema = new mongoose.Schema({
   },
   favoriteSpots: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Business",
+      businessId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Business",
+      },
+      name: {
+        type: String,
+      },
+      happyHour: {
+        menu: String,
+        times: [
+          {
+            dayOfWeek: String,
+            start: String,
+            end: String,
+          },
+        ],
+      },
     },
   ],
 });
