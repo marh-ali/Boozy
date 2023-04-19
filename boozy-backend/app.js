@@ -7,9 +7,11 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const apiRoutes = require("./routes/api");
 const app = express();
-app.use("/api", apiRoutes);
+
 app.use(express.json()); // Body parser
 app.use(cors()); // Enable CORS
+
+app.use("/api", apiRoutes);
 
 // Passport.js middleware
 app.use(passport.initialize());
