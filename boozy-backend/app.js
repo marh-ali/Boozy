@@ -7,6 +7,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const apiRoutes = require("./routes/api");
 const app = express();
+const router = express.Router();
 
 app.use(express.json()); // Body parser
 app.use(cors()); // Enable CORS
@@ -34,41 +35,28 @@ passport.use(
       callbackURL: "/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
-      // Google OAuth2 Strategy
-      passport.use(
-        new GoogleStrategy(
-          {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "/auth/google/callback",
-          },
-          async (accessToken, refreshToken, profile, done) => {
-            //logic
-            try {
-              const existingUser = await User.findOne({
-                oauthId: profile.id,
-                provider: "google",
-              });
+      try {
+        const existingUser = await User.findOne({
+          oauthId: profile.id,
+          provider: "google",
+        });
 
-              if (existingUser) {
-                return done(null, existingUser);
-              }
+        if (existingUser) {
+          return done(null, existingUser);
+        }
 
-              const newUser = await new User({
-                oauthId: profile.id,
-                provider: "google",
-                email: profile.emails[0].value,
-                displayName: profile.displayName,
-                picture: profile.photos[0].value,
-              }).save();
+        const newUser = await new User({
+          oauthId: profile.id,
+          provider: "google",
+          email: profile.emails[0].value,
+          displayName: profile.displayName,
+          picture: profile.photos[0].value,
+        }).save();
 
-              done(null, newUser);
-            } catch (error) {
-              done(error, null);
-            }
-          }
-        )
-      );
+        done(null, newUser);
+      } catch (error) {
+        done(error, null);
+      }
     }
   )
 );
@@ -102,4 +90,6 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
   console.log("Connected to MongoDB");
+
+  module.exports = router;
 });
