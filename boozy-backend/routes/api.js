@@ -63,7 +63,12 @@ router.post("/businesses", async (req, res) => {
     await newBusiness.save();
     res.status(201).json(newBusiness);
   } catch (error) {
-    res.status(500).json({ message: "Error creating business" });
+    res
+      .status(500)
+      .json({
+        message: "Error creating business",
+        error: JSON.stringify(error, null, 2),
+      });
   }
 });
 
