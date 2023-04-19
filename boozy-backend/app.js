@@ -1,15 +1,12 @@
 require("dotenv").config();
 const User = require("./models/User");
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const apiRoutes = require("./routes/api");
-
 const app = express();
-
 app.use("/api", apiRoutes);
 app.use(express.json()); // Body parser
 app.use(cors()); // Enable CORS
@@ -97,7 +94,6 @@ app.listen(PORT, () => {
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true,
 });
 
 const db = mongoose.connection;
