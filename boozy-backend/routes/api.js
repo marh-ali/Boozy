@@ -143,7 +143,13 @@ router.post("/users/login", async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.status(200).json({ accessToken: token, displayName: user.displayName }); // Move this line inside the try block
+    res
+      .status(200)
+      .json({
+        accessToken: token,
+        displayName: user.displayName,
+        email: user.email,
+      });
   } catch (error) {
     res.status(500).json({ message: "Error logging in" });
   }
