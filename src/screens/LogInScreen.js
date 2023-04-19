@@ -19,6 +19,7 @@ const LogInScreen = ({ navigation }) => {
       await AsyncStorage.setItem("accessToken", response.data.accessToken);
       await AsyncStorage.setItem("displayName", response.data.displayName);
       await AsyncStorage.setItem("email", response.data.email);
+      await AsyncStorage.setItem("userId", response.data.userId);
 
       navigation.navigate("Main");
     } catch (error) {
