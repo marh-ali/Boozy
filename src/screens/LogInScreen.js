@@ -1,14 +1,27 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native"; // Add Alert here
 import Button from "../components/Button";
 import InputField from "../components/InputField";
+import api from "../api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LogInScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogIn = () => {
-    // Implement log-in functionality here.
+  const handleLogIn = async () => {
+    try {
+      const response = await api.post("/users/login", {
+        email,
+        password,
+      });
+
+      await AsyncStorage.setItem("accessToken", response.data.accessToken);
+
+      navigation.navigate("Main");
+    } catch (error) {
+      Alert.alert("Error", error.response.data.message);
+    }
   };
 
   return (
