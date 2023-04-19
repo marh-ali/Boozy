@@ -79,6 +79,36 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
+  modalBackground: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    width: "90%",
+    maxHeight: "70%",
+  },
+
+  restaurantInfo: {
+    marginBottom: 10,
+  },
+  restaurantName: {
+    fontWeight: "bold",
+    fontSize: 24,
+    marginBottom: 10,
+  },
+  restaurantDetails: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  favoriteButtonContainer: {
+    alignItems: "flex-end",
+    marginTop: -5,
+  },
 });
 
 export default styles;
