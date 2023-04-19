@@ -37,17 +37,49 @@ const MainScreen = ({ navigation }) => {
     fetchDisplayName();
   }, []);
 
+  const signOut = async () => {
+    try {
+      await AsyncStorage.removeItem("accessToken");
+      await AsyncStorage.removeItem("displayName");
+      setDisplayName(null);
+      navigation.navigate("LogIn");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
+  <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
+    <Text style={styles.userProfileButton}>Profile</Text>
+  </TouchableOpacity>;
+
+  <TouchableOpacity onPress={signOut}>
+    <Text style={styles.signOutButton}>Sign Out</Text>
+  </TouchableOpacity>;
+
   return (
     <View style={styles.container}>
       <View style={styles.banner}>
         {displayName ? (
-          <Text style={styles.bannerText}>Hey, {displayName}!</Text>
+          <>
+            <View style={styles.menu}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("UserProfile")}
+              >
+                <Text style={styles.userProfileButton}>Profile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={signOut}>
+                <Text style={styles.signOutButton}>Sign Out</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.bannerText}>Hey, {displayName}!</Text>
+          </>
         ) : (
           <TouchableOpacity onPress={() => navigation.navigate("LogIn")}>
             <Text style={styles.bannerText}>Login to save your spots!</Text>
           </TouchableOpacity>
         )}
       </View>
+
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -95,6 +127,23 @@ const styles = StyleSheet.create({
   bannerText: {
     color: "#fff",
     fontSize: 18,
+  },
+  menu: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+  },
+  userProfileButton: {
+    color: "#fff",
+    fontSize: 18,
+    textDecorationLine: "underline",
+  },
+  signOutButton: {
+    color: "#fff",
+    fontSize: 18,
+    textDecorationLine: "underline",
+    marginLeft: 10,
   },
 });
 
