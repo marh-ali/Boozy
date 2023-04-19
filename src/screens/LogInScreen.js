@@ -17,6 +17,7 @@ const LogInScreen = ({ navigation }) => {
       });
 
       await AsyncStorage.setItem("accessToken", response.data.accessToken);
+      await AsyncStorage.setItem("displayName", response.data.displayName);
 
       navigation.navigate("Main");
     } catch (error) {
