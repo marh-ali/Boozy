@@ -5,6 +5,16 @@ const Business = require("../models/Business");
 const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 
 // Business accounts routes
+
+router.get("/businesses", async (req, res) => {
+  try {
+    const businesses = await Business.find({});
+    res.status(200).json(businesses);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching businesses" });
+  }
+});
+
 router.get("/businesses/:id", async (req, res) => {
   try {
     const business = await Business.findById(req.params.id);
