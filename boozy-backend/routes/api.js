@@ -5,12 +5,16 @@ const Business = require("../models/Business");
 const ensureAuthenticated = require("../middleware/ensureAuthenticated");
 
 // Business accounts routes
-router.get("/businesses", async (req, res) => {
+router.get("/businesses/:id", async (req, res) => {
   try {
-    const businesses = await Business.find();
-    res.status(200).json(businesses);
+    const business = await Business.findById(req.params.id);
+    if (business) {
+      res.json(business);
+    } else {
+      res.status(404).json({ message: "Business not found" });
+    }
   } catch (error) {
-    res.status(500).json({ message: "Error fetching businesses" });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -89,3 +93,5 @@ router.delete(
     }
   }
 );
+
+module.exports = router;
