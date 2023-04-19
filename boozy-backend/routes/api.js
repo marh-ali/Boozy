@@ -3,9 +3,9 @@ const router = express.Router();
 const User = require("../models/User");
 const Business = require("../models/Business");
 const ensureAuthenticated = require("../middleware/ensureAuthenticated");
+const bcrypt = require("bcrypt");
 
 // Business accounts routes
-
 router.get("/businesses", async (req, res) => {
   try {
     const businesses = await Business.find({});
@@ -103,5 +103,29 @@ router.delete(
     }
   }
 );
+
+// Sign up route
+router.post("/users/signup", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const newUser = new User({
+      email,
+      password,
+      displayName: email.split("@")[0],
+      provider: "local",
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "User created successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error creating user" });
+  }
+});
 
 module.exports = router;

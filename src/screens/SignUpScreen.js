@@ -2,14 +2,34 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
+import api from "../api"; // import the API instance
 
 const SignUpScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSignUp = () => {
-    // Implement sign-up functionality here.
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await api.post("/users/signup", {
+        email,
+        password,
+      });
+
+      // If the sign-up is successful, navigate to the LogIn screen
+      if (response.status === 201) {
+        alert("Sign up successful. Please log in.");
+        navigation.navigate("LogIn");
+      }
+    } catch (error) {
+      console.error("Error signing up:", error);
+      alert("Error signing up. Please try again.");
+    }
   };
 
   return (
