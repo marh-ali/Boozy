@@ -8,6 +8,7 @@ import MainScreen from "./src/screens/MainScreen/MainScreen";
 import HappyHourDetailsScreen from "./src/screens/HappyHourDetailsScreen";
 import UserProfileScreen from "./src/screens/UserProfileScreen";
 import BusinessDashboardScreen from "./src/screens/BusinessDashboardScreen";
+import BusinessSignUpScreen from "./src/screens/BusinessSignUpScreen/BusinessSignUpScreen";
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,7 @@ const App = () => {
           name="BusinessDashboard"
           component={BusinessDashboardScreen}
         />
+        <Stack.Screen name="BusinessSignUp" component={BusinessSignUpScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
