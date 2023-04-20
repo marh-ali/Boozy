@@ -76,7 +76,6 @@ const UserProfileScreen = ({ navigation }) => {
       <Text style={styles.title}>User Profile</Text>
       <Text>Name: {user.displayName}</Text>
       <Text>Email: {user.email}</Text>
-      <Text>Favorites: {favorites.length}</Text>
       <Button title="Edit Profile" onPress={toggleEdit} />
       {editing && (
         <>
@@ -95,16 +94,6 @@ const UserProfileScreen = ({ navigation }) => {
           <Button title="Save Changes" onPress={updateProfile} />
         </>
       )}
-      <FlatList
-        data={favorites}
-        renderItem={({ item }) => (
-          // Replace this with your HappyHourDetailsScreen component
-          <View>
-            <Text>Favorite: {item.id}</Text>
-          </View>
-        )}
-        keyExtractor={(item) => item.id}
-      />
     </View>
   );
 };
