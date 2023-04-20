@@ -5,7 +5,7 @@
 
 <body class="stackedit">
   <div class="stackedit__html"><h1 id="boozy">Boozy</h1>
-<p>Boozy is a mobile app that helps users find the nearest happy hour locations around them. Users can view nearby businesses, explore their happy hour times, access their happy hour menus, and save their favorite spots for future reference. Businesses can also register, manage their happy hour listings, and receive valuable user feedback through ratings and reviews.</p>
+<p>Boozy is a mobile app that helps users find the nearest happy hour locations around them. Users can view nearby businesses on a map, explore their happy hour times, access their happy hour menus, and save their favorite spots for future reference. Businesses can also register, manage their happy hour listings, and receive valuable user feedback through ratings and reviews.</p>
 <p> <em>Boozy is work in progress. Italicized features below are being built. Follow my project here or fork it and be part of it. </em> </p>
 <h2 id="tech-stack">Tech Stack</h2>
 <ul>
