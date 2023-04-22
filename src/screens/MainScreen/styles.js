@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   banner: {
-    backgroundColor: "rgba(95, 158, 160, 0.9)",
+    backgroundColor: "#5F9EA0",
     padding: 10,
     justifyContent: "center",
     alignItems: "center",

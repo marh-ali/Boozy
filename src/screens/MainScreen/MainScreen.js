@@ -14,6 +14,7 @@ import styles from "./styles";
 import useBusinesses from "../../hooks/useBusinesses";
 import useFavorites from "../../hooks/useFavorites";
 import useLocationPermission from "../../hooks/useLocationPermission";
+import useSignOut from "../../hooks/useSignOut";
 
 import FavoriteButton from "../../components/FavoriteButton";
 
@@ -54,16 +55,14 @@ const MainScreen = ({ navigation }) => {
     };
   }, [navigation]);
 
-  const signOut = async () => {
-    try {
-      await AsyncStorage.removeItem("accessToken");
-      await AsyncStorage.removeItem("displayName");
+  const { signOut, isSignedOut } = useSignOut();
+
+  useEffect(() => {
+    if (isSignedOut) {
       setDisplayName(null);
       navigation.navigate("LogIn");
-    } catch (error) {
-      console.error("Error signing out:", error);
     }
-  };
+  }, [isSignedOut, navigation]);
 
   const setFavorites = (updatedFavorites) => {
     setFavoritesState(updatedFavorites);
@@ -114,6 +113,7 @@ const MainScreen = ({ navigation }) => {
       <Modal
         animationType="slide"
         transparent={true}
+        visible
         visible={selectedBusiness !== null}
         onRequestClose={() => {
           setSelectedBusiness(null);
@@ -135,6 +135,7 @@ const MainScreen = ({ navigation }) => {
           <MapView
             provider={PROVIDER_GOOGLE}
             style={styles.map}
+            backgroundColor="#000000"
             initialRegion={{
               latitude: 38.89511, // Washington DC coordinates
               longitude: -77.03637,
@@ -149,15 +150,9 @@ const MainScreen = ({ navigation }) => {
                   latitude: business.location.coordinates[1],
                   longitude: business.location.coordinates[0],
                 }}
+                title={business.name}
                 onPress={() => setSelectedBusiness(business)}
-              >
-                <Callout>
-                  <View>
-                    <Text style={{ fontWeight: "bold" }}>{business.name}</Text>
-                    <Text>{business.location.address}</Text>
-                  </View>
-                </Callout>
-              </Marker>
+              ></Marker>
             ))}
           </MapView>
         </>
