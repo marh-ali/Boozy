@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const api = axios.create({
-  baseURL: "https://2826-68-33-16-202.ngrok-free.app/api", // Replace with your Expo development URL and the backend server's port
+  baseURL: "https://54ab-68-33-16-202.ngrok-free.app/api", // Replace with your Expo development URL and the backend server's port
 });
 
 api.interceptors.request.use(
@@ -18,6 +18,13 @@ api.interceptors.request.use(
   }
 );
 
-export default api;
+// Add an interceptor for handling errors in responses
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("API error:", error.response); // Display the full error response
+    return Promise.reject(error);
+  }
+);
 
-//   baseURL: "http://192.168.0.104:3001", // Replace with your Expo development URL and the backend server's port
+export default api;
