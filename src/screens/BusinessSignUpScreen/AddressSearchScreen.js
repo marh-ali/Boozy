@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import styles from "./styles";
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.GOOGLE_API;
 
 const AddressSearchScreen = ({ navigation }) => {
   return (

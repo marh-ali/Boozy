@@ -2,7 +2,8 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const api = axios.create({
-  baseURL: "https://54ab-68-33-16-202.ngrok-free.app/api", // Replace with your Expo development URL and the backend server's port
+  // baseURL: "https://54ab-68-33-16-202.ngrok-free.app/api", // Replace with your Expo development URL and the backend server's port
+  baseURL: "https://df7b-73-163-84-229.ngrok-free.app/api", // Replace with your Expo development URL and the backend server's port
 });
 
 api.interceptors.request.use(
