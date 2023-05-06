@@ -13,10 +13,14 @@ import api from "../../api";
 import styles from "./styles";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Modal from "react-native-modal";
+import { ScrollView } from "react-native-gesture-handler";
+import {
+  KeyboardAwareScrollView,
+  KeyboardAwareFlatList,
+} from "react-native-keyboard-aware-scroll-view";
 
-const API_KEY = process.env.API_KEY;
-
-// #TODO: Fix Google autocomplete
+// #TODO: Loadup .env properly
+const GOOGLE_API = process.env.GOOGLE_API;
 
 const BusinessSignUpScreen = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -34,10 +38,18 @@ const BusinessSignUpScreen = ({ navigation }) => {
   const [end, setEnd] = useState("");
   const [menu, setMenu] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [coordinates, setCoordinates] = useState({
+    latitude: null,
+    longitude: null,
+  });
 
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
-  };
+  // const toggleModal = () => {
+  //   setIsModalVisible(!isModalVisible);
+  // };
+  const CustomScrollView = (props) => (
+    <KeyboardAwareScrollView keyboardShouldPersistTaps="handled" {...props} />
+  );
+
   const handleBusinessSignUp = async () => {
     try {
       const response = await api.post("/businesses", {
@@ -81,6 +93,7 @@ const BusinessSignUpScreen = ({ navigation }) => {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      {/* <KeyboardAwareScrollView keyboardShouldPersistTaps="handled"> */}
       <Text style={styles.welcomeText}>Thank you for joining Boozy!</Text>
       <Text style={styles.title}>Business Sign Up</Text>
       <InputField
@@ -102,34 +115,49 @@ const BusinessSignUpScreen = ({ navigation }) => {
         secureTextEntry
         style={styles.input}
       />
-      <TouchableOpacity onPress={toggleModal}>
-        <InputField
-          value={address}
-          editable={false}
-          placeholder="Search for the address"
-          style={styles.input}
+
+      {/* <Modal isVisible={isModalVisible}> */}
+      <View style={{ width: "100%", height: 150 }}>
+        <GooglePlacesAutocomplete
+          query={{ key: GOOGLE_API }}
+          fetchDetails={true}
+          onFail={(error) => console.log(error)}
+          onNotFound={() => console.log("no results")}
+          placeholder="Search for address"
+          onPress={(data, details = null) => {
+            setAddress(details.formatted_address);
+            setCity(
+              details.address_components.find((component) =>
+                component.types.includes("locality")
+              ).long_name
+            );
+            setState(
+              details.address_components.find((component) =>
+                component.types.includes("administrative_area_level_1")
+              ).short_name
+            );
+            setCountry(
+              details.address_components.find((component) =>
+                component.types.includes("country")
+              ).short_name
+            );
+            setPostalCode(
+              details.address_components.find((component) =>
+                component.types.includes("postal_code")
+              ).long_name
+            );
+            const lat = details.geometry.location.lat;
+            const lng = details.geometry.location.lng;
+            setCoordinates({ latitude: lat, longitude: lng });
+          }}
+          // query={{
+          //   key: API_KEY,
+          //   language: "en",
+          //   components: "country:us",
+          //   fetchDetails: true,
+          // }}
         />
-      </TouchableOpacity>
-
-      <Modal isVisible={isModalVisible}>
-        <View style={styles.modalContent}>
-          <GooglePlacesAutocomplete
-            placeholder="Search"
-            onPress={(data, details = null) => {
-              setAddress(details.formatted_address);
-              toggleModal();
-            }}
-            query={{
-              key: API_KEY,
-              language: "en",
-              components: "country:us",
-              fetchDetails: true,
-            }}
-          />
-          <Button title="Close" onPress={toggleModal} />
-        </View>
-      </Modal>
-
+      </View>
       <InputField
         value={menu}
         onChangeText={setMenu}
@@ -137,20 +165,17 @@ const BusinessSignUpScreen = ({ navigation }) => {
         style={styles.input}
       />
       <Text style={styles.label}>Offers Food</Text>
-
       <Switch
         value={offersFood}
         onValueChange={setOffersFood}
         style={styles.switch}
       />
-
       <Text style={styles.label}>Offers Drinks</Text>
       <Switch
         value={offersDrinks}
         onValueChange={setOffersDrinks}
         style={styles.switch}
       />
-
       <InputField
         value={dayOfWeek}
         onChangeText={setDayOfWeek}
@@ -169,8 +194,8 @@ const BusinessSignUpScreen = ({ navigation }) => {
         placeholder="Happy Hour End Time (e.g. 19:00)"
         style={styles.input}
       />
-
       <Button title="Sign Up" onPress={handleBusinessSignUp} />
+      {/* </KeyboardAwareScrollView> */}
     </KeyboardAvoidingView>
   );
 };
